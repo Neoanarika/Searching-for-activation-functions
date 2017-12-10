@@ -4,6 +4,6 @@ This is my tensorflow implementation of the Google brain paper "Searching for ac
 
 Status : Still a work in progress.
 
-#Info 
+# Info 
 
 This implementation is done in tensorflow v1.1
