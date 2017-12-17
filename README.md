@@ -2,8 +2,28 @@
 
 This is my tensorflow implementation of the Google brain paper "Searching for activation functions" for the 2017 NIPS challenge. 
 
+Citation:
+```
+@article{DBLP:journals/corr/abs-1710-05941,
+  author    = {Prajit Ramachandran and
+               Barret Zoph and
+               Quoc V. Le},
+  title     = {Searching for Activation Functions},
+  journal   = {CoRR},
+  volume    = {abs/1710.05941},
+  year      = {2017},
+  url       = {http://arxiv.org/abs/1710.05941},
+  archivePrefix = {arXiv},
+  eprint    = {1710.05941},
+  timestamp = {Wed, 01 Nov 2017 19:05:42 +0100},
+  biburl    = {http://dblp.org/rec/bib/journals/corr/abs-1710-05941},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+```
 Status : Still a work in progress.
 
-# Info 
+# Dependencies 
 
-This implementation is done in tensorflow v1.1
+- Python 3
+- TensorFlow >=1.0
+
