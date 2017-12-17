@@ -1,11 +1,11 @@
 import models
-import cPickle
+import pickle
 import numpy as np
 import tensorflow as tf
 
 def unpickle(file):
     fo = open(file, 'rb')
-    dict = cPickle.load(fo)
+    dict = pickle.load(fo)
     fo.close()
     return dict
 
@@ -32,7 +32,7 @@ def load_data():
     y = np.concatenate(y_all)
     x = np.dstack((x[:, :1024], x[:, 1024:2048], x[:, 2048:]))
     x = x.reshape((x.shape[0], 32, 32, 3))
-    
+
     pixel_mean = np.mean(x[0:50000],axis=0)
     x -= pixel_mean
 
@@ -76,20 +76,20 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 saver = tf.train.Saver()
 checkpoint = tf.train.latest_checkpoint(".")
 if checkpoint:
-    print "Restoring from checkpoint", checkpoint
+    print("Restoring from checkpoint", checkpoint)
     saver.restore(sess, checkpoint)
 else:
-    print "Couldn't find checkpoint to restore from. Starting over."
+    print("Couldn't find checkpoint to restore from. Starting over.")
 
 for j in range (10):
     for i in range (0, 50000, batch_size):
         feed_dict={
-            X: X_train[i:i + batch_size], 
+            X: X_train[i:i + batch_size],
             Y: Y_train[i:i + batch_size],
             learning_rate: 0.001}
         sess.run([train_op], feed_dict=feed_dict)
         if i % 512 == 0:
-            print "training on image #%d" % i
+            print("training on image #%d" % i)
             saver.save(sess, 'progress', global_step=i)
 
 for i in range (0, 10000, batch_size):
@@ -99,6 +99,6 @@ for i in range (0, 10000, batch_size):
             Y: Y_test[i:i+batch_size]
         })
         accuracy_summary = tf.scalar_summary("accuracy", accuracy)
-        print acc
+        print(acc)
 
 sess.close()
