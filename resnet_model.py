@@ -38,6 +38,17 @@ _BATCH_NORM_DECAY = 0.997
 _BATCH_NORM_EPSILON = 1e-5
 
 
+def batch_norm_activation(inputs, is_training, data_format,activation):
+  """Performs a batch normalization followed by a ReLU."""
+  # We set fused=True for a significant performance boost. See
+  # https://www.tensorflow.org/performance/performance_guide#common_fused_ops
+  inputs = tf.layers.batch_normalization(
+      inputs=inputs, axis=1 if data_format == 'channels_first' else 3,
+      momentum=_BATCH_NORM_DECAY, epsilon=_BATCH_NORM_EPSILON, center=True,
+      scale=True, training=is_training, fused=True)
+  inputs = activation(inputs)
+  return inputs
+
 def batch_norm_relu(inputs, is_training, data_format):
   """Performs a batch normalization followed by a ReLU."""
   # We set fused=True for a significant performance boost. See
@@ -48,7 +59,6 @@ def batch_norm_relu(inputs, is_training, data_format):
       scale=True, training=is_training, fused=True)
   inputs = tf.nn.relu(inputs)
   return inputs
-
 
 def fixed_padding(inputs, kernel_size, data_format):
   """Pads the input along the spatial dimensions independently of input size.
@@ -111,9 +121,10 @@ def building_block(inputs, filters, is_training, projection_shortcut, strides,
     The output tensor of the block.
   """
   shortcut = inputs
-  inputs = batch_norm_relu(inputs, is_training, data_format)
+  inputs = batch_norm_activation(inputs, is_training, data_format,tf.nn.relu)
+  #inputs = batch_norm_relu(inputs, is_training, data_format)
 
-  # The projection shortcut should come after the first batch norm and ReLU
+  # The projection shortcut should come after the first batch norm and then some activation
   # since it performs a 1x1 convolution.
   if projection_shortcut is not None:
     shortcut = projection_shortcut(inputs)
@@ -122,7 +133,8 @@ def building_block(inputs, filters, is_training, projection_shortcut, strides,
       inputs=inputs, filters=filters, kernel_size=3, strides=strides,
       data_format=data_format)
 
-  inputs = batch_norm_relu(inputs, is_training, data_format)
+  inputs = batch_norm_activation(inputs, is_training, data_format,tf.nn.relu)
+  #inputs = batch_norm_relu(inputs, is_training, data_format)
   inputs = conv2d_fixed_padding(
       inputs=inputs, filters=filters, kernel_size=3, strides=1,
       data_format=data_format)
@@ -151,7 +163,8 @@ def bottleneck_block(inputs, filters, is_training, projection_shortcut,
     The output tensor of the block.
   """
   shortcut = inputs
-  inputs = batch_norm_relu(inputs, is_training, data_format)
+  inputs = batch_norm_activation(inputs, is_training, data_format,tf.nn.relu)
+  #inputs = batch_norm_relu(inputs, is_training, data_format)
 
   # The projection shortcut should come after the first batch norm and ReLU
   # since it performs a 1x1 convolution.
@@ -162,12 +175,14 @@ def bottleneck_block(inputs, filters, is_training, projection_shortcut,
       inputs=inputs, filters=filters, kernel_size=1, strides=1,
       data_format=data_format)
 
-  inputs = batch_norm_relu(inputs, is_training, data_format)
+  inputs = batch_norm_activation(inputs, is_training, data_format,tf.nn.relu)
+  #inputs = batch_norm_relu(inputs, is_training, data_format)
   inputs = conv2d_fixed_padding(
       inputs=inputs, filters=filters, kernel_size=3, strides=strides,
       data_format=data_format)
 
-  inputs = batch_norm_relu(inputs, is_training, data_format)
+  inputs = batch_norm_activation(inputs, is_training, data_format,tf.nn.relu)
+  #inputs = batch_norm_relu(inputs, is_training, data_format)
   inputs = conv2d_fixed_padding(
       inputs=inputs, filters=4 * filters, kernel_size=1, strides=1,
       data_format=data_format)
@@ -265,7 +280,8 @@ def cifar10_resnet_v2_generator(resnet_size, num_classes, data_format=None):
         strides=2, is_training=is_training, name='block_layer3',
         data_format=data_format)
 
-    inputs = batch_norm_relu(inputs, is_training, data_format)
+    inputs = batch_norm_activation(inputs, is_training, data_format,tf.nn.relu)
+    #inputs = batch_norm_relu(inputs, is_training, data_format)
     inputs = tf.layers.average_pooling2d(
         inputs=inputs, pool_size=8, strides=1, padding='VALID',
         data_format=data_format)
@@ -333,7 +349,8 @@ def imagenet_resnet_v2_generator(block_fn, layers, num_classes,
         strides=2, is_training=is_training, name='block_layer4',
         data_format=data_format)
 
-    inputs = batch_norm_relu(inputs, is_training, data_format)
+    inputs = batch_norm_activation(inputs, is_training, data_format,tf.nn.relu)
+    #inputs = batch_norm_relu(inputs, is_training, data_format)
     inputs = tf.layers.average_pooling2d(
         inputs=inputs, pool_size=7, strides=1, padding='VALID',
         data_format=data_format)
