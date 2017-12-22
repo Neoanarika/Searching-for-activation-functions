@@ -7,17 +7,21 @@ import tensorflow as tf
 class Network(object):
     # My Concern is that some of these activation function might be numerically unstable due to the implementation
     # tf.log(1+exp(x)) is one of these things
-    unary = {1:lambda x:x ,2:lambda x: -x, 3: tf.abs, 4:lambda x : tf.pow(x,2),5:lambda x : tf.pow(x,3),
+    full_list_unary = {1:lambda x:x ,2:lambda x: -x, 3: tf.abs, 4:lambda x : tf.pow(x,2),5:lambda x : tf.pow(x,3),
       6:tf.sqrt,7:lambda x: tf.Variable(tf.truncated_normal([1], stddev=0.08))*x,
       8:lambda x : x + tf.Variable(tf.truncated_normal([1], stddev=0.08)),9:lambda x: tf.log(tf.abs(x)+10e-8),
       10:tf.exp,11:tf.sin,12:tf.sinh,13:tf.cosh,14:tf.tanh,15:tf.asinh,16:tf.atan,17:lambda x: tf.sin(x)/x,
       18:lambda x : tf.maximum(x,0),19:lambda x : tf.minimum(x,0),20:tf.sigmoid,21:lambda x:tf.log(1+tf.exp(x)),
       22:lambda x:tf.exp(-tf.pow(x,2)),23:tf.erf,24:lambda x: tf.Variable(tf.truncated_normal([1], stddev=0.08))}
 
-    binary = {1:lambda x,y: x+y,2:lambda x,y:x*y,3:lambda x,y:x-y,4:lambda x,y:x/(y+10e-8),
+    full_list_binary = {1:lambda x,y: x+y,2:lambda x,y:x*y,3:lambda x,y:x-y,4:lambda x,y:x/(y+10e-8),
     5:lambda x,y:tf.maximum(x,y),6:lambda x,y: tf.sigmoid(x)*y,7:lambda x,y:tf.exp(-tf.Variable(tf.truncated_normal([1], stddev=0.08))*tf.pow(x-y,2)),
     8:lambda x,y:tf.exp(-tf.Variable(tf.truncated_normal([1], stddev=0.08))*tf.abs(x-y)),
     9:lambda x,y: tf.Variable(tf.truncated_normal([1], stddev=0.08))*x + (1-tf.Variable(tf.truncated_normal([1], stddev=0.08)))*y}
+
+    unary = {1:lambda x:x ,2:lambda x: -x, 3: lambda x: tf.maximum(x,0), 4:lambda x : tf.pow(x,2),5:tf.tanh}
+    binary = {1:lambda x,y: x+y,2:lambda x,y:x*y,3:lambda x,y:x-y,4:lambda x,y:tf.maximum(x,y),5:lambda x,y: tf.sigmoid(x)*y}
+    inputs = {1:lambda x:x , 2:lambda x:0, 3: lambda x:3.14159265,4: lambda x : 1, 5: lambda x: 1.61803399}
 
     def __init__(self, config):
         self.config = config

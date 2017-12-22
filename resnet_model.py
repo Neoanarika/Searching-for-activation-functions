@@ -38,16 +38,26 @@ _BATCH_NORM_DECAY = 0.997
 _BATCH_NORM_EPSILON = 1e-5
 
 
-def batch_norm_activation(inputs, is_training, data_format,activation):
+def function_writer(activation,inputs,units):
+    unary = {1:lambda x:x ,2:lambda x: -x, 3: lambda x:tf.maximum(x,0), 4:lambda x : tf.pow(x,2),5:tf.tanh}
+    binary = {1:lambda x,y: x+y,2:lambda x,y:x*y,3:lambda x,y:x-y,4:lambda x,y:tf.maximum(x,y),5:lambda x,y: tf.sigmoid(x)*y}
+    input_functions = {1:lambda x:x , 2:lambda x:0.0, 3: lambda x:3.14159265,4: lambda x : 1.0, 5: lambda x: 1.61803399}
+
+    for i in range(units):
+        inputs = binary[activation[i*5+4]](unary[activation[i*5+2]](input_functions[activation[i*5+0]](inputs)),unary[activation[i*5+3]](input_functions[activation[i*5+1]](inputs)))
+    return inputs
+
+def batch_norm_activation(inputs, is_training, data_format,activation,units):
   """Performs a batch normalization followed by a ReLU."""
   # We set fused=True for a significant performance boost. See
   # https://www.tensorflow.org/performance/performance_guide#common_fused_ops
+
   inputs = tf.layers.batch_normalization(
       inputs=inputs, axis=1 if data_format == 'channels_first' else 3,
       momentum=_BATCH_NORM_DECAY, epsilon=_BATCH_NORM_EPSILON, center=True,
       scale=True, training=is_training, fused=True)
-  inputs = activation(inputs)
-  return inputs
+
+  return funtion_writer(activation,inputs,units)
 
 def batch_norm_relu(inputs, is_training, data_format):
   """Performs a batch normalization followed by a ReLU."""
