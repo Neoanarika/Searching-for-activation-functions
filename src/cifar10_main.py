@@ -307,7 +307,7 @@ def main(unused_argv):
     tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
     print("Sent results to RNN")
     sess = tf.Session()
-    _ = sess.run(self.tr_cont_step, feed_dict={self.val_accuracy : reward})
+    _ = sess.run(tr_cont_step, feed_dict={val_accuracy : reward})
     print("Training RNN")
 
 
