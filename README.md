@@ -2,7 +2,12 @@
 
 This is my tensorflow implementation of the Google brain paper "Searching for activation functions" for the 2017 NIPS challenge. 
 
-Citation:
+# How to use 
+
+```
+python cifar10_main.py
+```
+# Citation
 ```
 @article{DBLP:journals/corr/abs-1710-05941,
   author    = {Prajit Ramachandran and
