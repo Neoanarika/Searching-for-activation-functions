@@ -278,7 +278,13 @@ def main(unused_argv):
   config = Config(args)
   net = Network(config)
   outputs,prob = net.neural_search()
+
+  #Generate hyperparams
   hyperparams = net.gen_hyperparams(outputs)
+  with open("tmp","w") as f:
+      f.write(sess.run(hyperparams))
+  print(sess.run(hyperparams))
+  
   reinforce_loss = net.REINFORCE(prob)
 
   # FLAGS.train_epochs // FLAGS.epochs_per_eval
@@ -311,8 +317,9 @@ def main(unused_argv):
     print("Sent results to RNN")
     sess = tf.Session()
     sess.run(tf.global_variables_initializer())
-    _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
     print("Training RNN")
+    _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
+    print("RNN Trained")
 
 
 if __name__ == '__main__':
