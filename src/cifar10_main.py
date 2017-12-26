@@ -292,10 +292,13 @@ def main(unused_argv):
     logging_hook = tf.train.LoggingTensorHook(
         tensors=tensors_to_log, every_n_iter=100)
 
+    # cifar_classifier.train(
+    #     input_fn=lambda: input_fn(
+    #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
+    #     hooks=[logging_hook])
     cifar_classifier.train(
         input_fn=lambda: input_fn(
-            True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
-        hooks=[logging_hook])
+            True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
 
     # Evaluate the model and print results
     eval_results = cifar_classifier.evaluate(
