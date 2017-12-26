@@ -304,14 +304,14 @@ def main(unused_argv):
     tf_config.gpu_options.allow_growth = True
     sess = tf.Session(config=tf_config)
     sess.run(tf.global_variables_initializer())
-    sess.run(tf.local_variables_initializer())
+    #sess.run(tf.local_variables_initializer())
     config = Config(args)
     net = Network(config)
     outputs,prob = net.neural_search()
     #Generate hyperparams
     hyperparams = net.gen_hyperparams(outputs)
     reinforce_loss = net.REINFORCE(prob)
-    
+
     #Defining rnn
     val_accuracy = tf.placeholder(tf.float32)
     print("Sent results to RNN")
