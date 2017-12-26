@@ -261,6 +261,23 @@ def main(unused_argv):
   # Using the Winograd non-fused algorithms provides a small performance boost.
   os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
 
+  #RNN controller
+  args = Parser().get_parser().parse_args()
+  with tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
+      sess.run(tf.global_variables_initializer())
+      sess.run(tf.local_variables_initializer())
+      config = Config(args)
+      net = Network(config)
+      outputs,prob = net.neural_search()
+      #Generate hyperparams
+      hyperparams = net.gen_hyperparams(outputs)
+      with open("tmp","w") as f:
+          f.write(sess.run(hyperparams))
+      print(sess.run(hyperparams))
+
+  reinforce_loss = net.REINFORCE(prob)
+
+
   # Set up a RunConfig to only save checkpoints once per training cycle.
   #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
   run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True))
@@ -272,23 +289,6 @@ def main(unused_argv):
     'data_format': FLAGS.data_format,
     'batch_size': FLAGS.batch_size,
   })
-
-  #RNN controller
-  args = Parser().get_parser().parse_args()
-  sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True))
-  sess.run(tf.global_variables_initializer())
-  sess.run(tf.local_variables_initializer())
-  config = Config(args)
-  net = Network(config)
-  outputs,prob = net.neural_search()
-
-  #Generate hyperparams
-  hyperparams = net.gen_hyperparams(outputs)
-  with open("tmp","w") as f:
-      f.write(sess.run(hyperparams))
-  print(sess.run(hyperparams))
-
-  reinforce_loss = net.REINFORCE(prob)
 
   # FLAGS.train_epochs // FLAGS.epochs_per_eval
   for _ in range(1):
