@@ -261,20 +261,6 @@ def main(unused_argv):
   # Using the Winograd non-fused algorithms provides a small performance boost.
   os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
 
-  #RNN controller
-  args = Parser().get_parser().parse_args()
-  tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True, device_count = {'GPU': 0})
-  tf_config.gpu_options.allow_growth = True
-  sess = tf.Session(config=tf_config)
-  sess.run(tf.global_variables_initializer())
-  sess.run(tf.local_variables_initializer())
-  config = Config(args)
-  net = Network(config)
-  outputs,prob = net.neural_search()
-  #Generate hyperparams
-  hyperparams = net.gen_hyperparams(outputs)
-  reinforce_loss = net.REINFORCE(prob)
-
 
   # Set up a RunConfig to only save checkpoints once per training cycle.
   #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
@@ -312,6 +298,20 @@ def main(unused_argv):
         input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
     print(eval_results)
 
+    #RNN controller
+    args = Parser().get_parser().parse_args()
+    tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True, device_count = {'GPU': 0})
+    tf_config.gpu_options.allow_growth = True
+    sess = tf.Session(config=tf_config)
+    sess.run(tf.global_variables_initializer())
+    sess.run(tf.local_variables_initializer())
+    config = Config(args)
+    net = Network(config)
+    outputs,prob = net.neural_search()
+    #Generate hyperparams
+    hyperparams = net.gen_hyperparams(outputs)
+    reinforce_loss = net.REINFORCE(prob)
+    
     #Defining rnn
     val_accuracy = tf.placeholder(tf.float32)
     print("Sent results to RNN")
