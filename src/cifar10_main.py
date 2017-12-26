@@ -275,6 +275,8 @@ def main(unused_argv):
 
   #RNN controller
   args = Parser().get_parser().parse_args()
+  sess = tf.Session()
+  sess.run(tf.global_variables_initializer())
   config = Config(args)
   net = Network(config)
   outputs,prob = net.neural_search()
@@ -284,7 +286,7 @@ def main(unused_argv):
   with open("tmp","w") as f:
       f.write(sess.run(hyperparams))
   print(sess.run(hyperparams))
-  
+
   reinforce_loss = net.REINFORCE(prob)
 
   # FLAGS.train_epochs // FLAGS.epochs_per_eval
@@ -313,10 +315,8 @@ def main(unused_argv):
 
     #Defining rnn
     val_accuracy = tf.placeholder(tf.float32)
-    tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
     print("Sent results to RNN")
-    sess = tf.Session()
-    sess.run(tf.global_variables_initializer())
+    tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
     print("Training RNN")
     _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
     print("RNN Trained")
