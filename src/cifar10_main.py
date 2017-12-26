@@ -274,6 +274,7 @@ def main(unused_argv):
       with open("tmp","w") as f:
           f.write(sess.run(hyperparams))
       print(sess.run(hyperparams))
+      sess.close()
 
   reinforce_loss = net.REINFORCE(prob)
 
