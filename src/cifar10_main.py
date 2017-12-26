@@ -276,7 +276,7 @@ def main(unused_argv):
   #RNN controller
   args = Parser().get_parser().parse_args()
   sess = tf.Session()
-  sess.run(tf.initialize_all_variables())
+  sess.run(tf.global_variables_initializer())
   sees.run(tf.local_variables_initializer())
   config = Config(args)
   net = Network(config)
