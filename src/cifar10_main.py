@@ -263,18 +263,19 @@ def main(unused_argv):
 
   #RNN controller
   args = Parser().get_parser().parse_args()
-  with tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
-      sess.run(tf.global_variables_initializer())
-      sess.run(tf.local_variables_initializer())
-      config = Config(args)
-      net = Network(config)
-      outputs,prob = net.neural_search()
-      #Generate hyperparams
-      hyperparams = net.gen_hyperparams(outputs)
-      with open("tmp","w") as f:
-          f.write(sess.run(hyperparams))
-      print(sess.run(hyperparams))
-      sess.close()
+  tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True, device_count = {'GPU': 0})
+  tf_config.gpu_options.allow_growth = True
+  sess = tf.Session(config=tf_config)
+  sess.run(tf.global_variables_initializer())
+  sess.run(tf.local_variables_initializer())
+  config = Config(args)
+  net = Network(config)
+  outputs,prob = net.neural_search()
+  #Generate hyperparams
+  hyperparams = net.gen_hyperparams(outputs)
+  with open("tmp","w") as f:
+      f.write(sess.run(hyperparams))
+  print(sess.run(hyperparams))
 
   reinforce_loss = net.REINFORCE(prob)
 
