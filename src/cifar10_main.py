@@ -300,7 +300,7 @@ def main(unused_argv):
 
     #RNN controller
     args = Parser().get_parser().parse_args()
-    tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True, device_count = {'GPU': 0})
+    tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
     tf_config.gpu_options.allow_growth = True
     sess = tf.Session(config=tf_config)
     sess.run(tf.global_variables_initializer())
