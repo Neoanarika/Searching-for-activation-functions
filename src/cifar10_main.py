@@ -312,7 +312,7 @@ def main(unused_argv):
     tf_config.gpu_options.allow_growth = True
     sess = tf.Session(config=tf_config)
     sess.run(tf.global_variables_initializer())
-    #sess.run(tf.local_variables_initializer()) 
+    sess.run(tf.local_variables_initializer()) 
 
     #Defining rnn
     val_accuracy = tf.placeholder(tf.float32)
