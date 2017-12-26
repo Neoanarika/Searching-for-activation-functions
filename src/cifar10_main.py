@@ -321,7 +321,7 @@ def main(unused_argv):
     print("RNN Trained")
     # with open("tmp","w") as f:
     #     f.write(sess.run(hyperparams))
-    print(sess.run(hyperparams))
+    #print(sess.run(hyperparams))
 
 
 if __name__ == '__main__':
