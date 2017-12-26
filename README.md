@@ -7,7 +7,7 @@ This is my tensorflow implementation of the Google brain paper "Searching for ac
 ```
 python cifar10_main.py
 ```
-Citation:
+# Citation
 ```
 @article{DBLP:journals/corr/abs-1710-05941,
   author    = {Prajit Ramachandran and
