@@ -277,6 +277,7 @@ def main(unused_argv):
   args = Parser().get_parser().parse_args()
   sess = tf.Session()
   sess.run(tf.initialize_all_variables())
+  sees.run(tf.local_variables_initializer())
   config = Config(args)
   net = Network(config)
   outputs,prob = net.neural_search()
