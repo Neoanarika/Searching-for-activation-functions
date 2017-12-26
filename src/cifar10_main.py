@@ -304,7 +304,7 @@ def main(unused_argv):
     eval_results = cifar_classifier.evaluate(
         input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
     print(eval_results)
-    tr_cont_step = net.train_controller(reinforce_loss, eval_results)
+    tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
     print("Sent results to RNN")
     sess = tf.Session()
     _ = sess.run(self.tr_cont_step, feed_dict={self.val_accuracy : reward})
