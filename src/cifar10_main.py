@@ -320,9 +320,9 @@ def main(unused_argv):
     print("Training RNN")
     _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
     print("RNN Trained")
+    print(sess.run(hyperparams))
     with open("tmp","w") as f:
         f.write(sess.run(hyperparams))
-    print(sess.run(hyperparams))
 
 
 if __name__ == '__main__':
