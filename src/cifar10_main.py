@@ -270,7 +270,6 @@ def main(unused_argv):
   #Generate hyperparams
   hyperparams = net.gen_hyperparams(outputs)
   reinforce_loss = net.REINFORCE(prob)
-  tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
 
   tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
   tf_config.gpu_options.allow_growth = True
@@ -319,6 +318,8 @@ def main(unused_argv):
     print(eval_results)
 
     print("Training RNN")
+    tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
+    sess.run(tf.global_variables_initializer())
     _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
     print("RNN Trained")
 
