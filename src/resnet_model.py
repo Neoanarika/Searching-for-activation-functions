@@ -37,7 +37,6 @@ import tensorflow as tf
 _BATCH_NORM_DECAY = 0.997
 _BATCH_NORM_EPSILON = 1e-5
 
-
 def batch_norm_relu(inputs, is_training, data_format):
   """Performs a batch normalization followed by a ReLU."""
   # We set fused=True for a significant performance boost. See
@@ -46,8 +45,16 @@ def batch_norm_relu(inputs, is_training, data_format):
       inputs=inputs, axis=1 if data_format == 'channels_first' else 3,
       momentum=_BATCH_NORM_DECAY, epsilon=_BATCH_NORM_EPSILON, center=True,
       scale=True, training=is_training, fused=True)
+
+  unary = {1:lambda x:x ,2:lambda x: -x, 3: lambda x: tf.maximum(x,0), 4:lambda x : tf.pow(x,2),5:tf.tanh}
+  binary = {1:lambda x,y: x+y,2:lambda x,y:x*y,3:lambda x,y:x-y,4:lambda x,y:tf.maximum(x,y),5:lambda x,y: tf.sigmoid(x)*y}
+  inputs = {1:lambda x:x , 2:lambda x:0, 3: lambda x:3.14159265,4: lambda x : 1, 5: lambda x: 1.61803399}
+
   with open("tmp","w") as f:
       activation = f.readline()
+      activation = activation.split(" ")
+
+  activation = binary[activation[4]](unary[activation[2]](inputs[activation[0]]), unary[activation[3]](inputs[activation[1]]))
   inputs = tf.nn.relu(inputs)
   return inputs
 

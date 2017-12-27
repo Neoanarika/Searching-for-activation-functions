@@ -278,9 +278,6 @@ def main(unused_argv):
   sess.run(tf.global_variables_initializer())
   sess.run(tf.local_variables_initializer())
 
-  print("Training RNN")
-  _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
-  print("RNN Trained")
   print(sess.run(hyperparams))
   with open("tmp","w") as f:
       f.write(' '.join(map(str,sess.run(hyperparams))))
@@ -320,6 +317,10 @@ def main(unused_argv):
     eval_results = cifar_classifier.evaluate(
         input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
     print(eval_results)
+
+    print("Training RNN")
+    _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
+    print("RNN Trained")
 
 
 if __name__ == '__main__':
