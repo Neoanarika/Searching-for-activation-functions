@@ -46,6 +46,8 @@ def batch_norm_relu(inputs, is_training, data_format):
       inputs=inputs, axis=1 if data_format == 'channels_first' else 3,
       momentum=_BATCH_NORM_DECAY, epsilon=_BATCH_NORM_EPSILON, center=True,
       scale=True, training=is_training, fused=True)
+  with open("tmp","w") as f:
+      activation = f.readline()
   inputs = tf.nn.relu(inputs)
   return inputs
 
@@ -217,8 +219,7 @@ def block_layer(inputs, filters, block_fn, blocks, strides, is_training, name,
 def cifar10_resnet_v2_generator(resnet_size, num_classes, data_format=None):
   """Generator for CIFAR-10 ResNet v2 models.
 
-  Args:
-    resnet_size: A single integer for the size of the ResNet model.
+  Args:: A single integer for the size of the ResNet model.
     num_classes: The number of possible classes for image classification.
     data_format: The input format ('channels_last', 'channels_first', or None).
       If set to None, the format is dependent on whether a GPU is available.
