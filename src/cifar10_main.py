@@ -322,7 +322,7 @@ def main(unused_argv):
     print("RNN Trained")
     print(sess.run(hyperparams))
     with open("tmp","w") as f:
-        f.write(' '.join(sess.run(hyperparams).tolist()))
+        f.write(' '.join(map(str,sess.run(hyperparams))))
 
 
 if __name__ == '__main__':
