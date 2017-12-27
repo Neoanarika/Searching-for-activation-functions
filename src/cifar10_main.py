@@ -285,19 +285,6 @@ def main(unused_argv):
     logging_hook = tf.train.LoggingTensorHook(
         tensors=tensors_to_log, every_n_iter=100)
 
-    # cifar_classifier.train(
-    #     input_fn=lambda: input_fn(
-    #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
-    #     hooks=[logging_hook])
-    cifar_classifier.train(
-        input_fn=lambda: input_fn(
-            True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
-
-    # Evaluate the model and print results
-    eval_results = cifar_classifier.evaluate(
-        input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
-    print(eval_results)
-
     #RNN controller
     args = Parser().get_parser().parse_args()
 
@@ -312,7 +299,21 @@ def main(unused_argv):
     tf_config.gpu_options.allow_growth = True
     sess = tf.Session(config=tf_config)
     sess.run(tf.global_variables_initializer())
-    sess.run(tf.local_variables_initializer()) 
+    sess.run(tf.local_variables_initializer())
+    
+    # cifar_classifier.train(
+    #     input_fn=lambda: input_fn(
+    #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
+    #     hooks=[logging_hook])
+    cifar_classifier.train(
+        input_fn=lambda: input_fn(
+            True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
+
+    # Evaluate the model and print results
+    eval_results = cifar_classifier.evaluate(
+        input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
+    print(eval_results)
+
 
     #Defining rnn
     val_accuracy = tf.placeholder(tf.float32)
