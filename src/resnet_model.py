@@ -53,7 +53,8 @@ def batch_norm_relu(inputs, is_training, data_format):
   with open("tmp","r") as f:
       activation = f.readline()
       activation = activation.split(" ")
-
+      activation = map(int,activation)
+  print(activation)
   activation = binary[activation[4]](unary[activation[2]](inputs[activation[0]]), unary[activation[3]](inputs[activation[1]]))
   inputs = tf.nn.relu(inputs)
   return inputs
