@@ -285,22 +285,6 @@ def main(unused_argv):
     logging_hook = tf.train.LoggingTensorHook(
         tensors=tensors_to_log, every_n_iter=100)
 
-    #RNN controller
-    args = Parser().get_parser().parse_args()
-
-    config = Config(args)
-    net = Network(config)
-    outputs,prob = net.neural_search()
-    #Generate hyperparams
-    hyperparams = net.gen_hyperparams(outputs)
-    reinforce_loss = net.REINFORCE(prob)
-
-    tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
-    tf_config.gpu_options.allow_growth = True
-    sess = tf.Session(config=tf_config)
-    sess.run(tf.global_variables_initializer())
-    sess.run(tf.local_variables_initializer())
-    
     # cifar_classifier.train(
     #     input_fn=lambda: input_fn(
     #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
@@ -315,10 +299,24 @@ def main(unused_argv):
     print(eval_results)
 
 
+    #RNN controller
+    args = Parser().get_parser().parse_args()
     #Defining rnn
     val_accuracy = tf.placeholder(tf.float32)
-    print("Sent results to RNN")
+    config = Config(args)
+    net = Network(config)
+    outputs,prob = net.neural_search()
+    #Generate hyperparams
+    hyperparams = net.gen_hyperparams(outputs)
+    reinforce_loss = net.REINFORCE(prob)
     tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
+
+    tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
+    tf_config.gpu_options.allow_growth = True
+    sess = tf.Session(config=tf_config)
+    sess.run(tf.global_variables_initializer())
+    sess.run(tf.local_variables_initializer())
+
     print("Training RNN")
     _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
     print("RNN Trained")
