@@ -48,14 +48,15 @@ def batch_norm_relu(inputs, is_training, data_format):
 
   unary = {1:lambda x:x ,2:lambda x: -x, 3: lambda x: tf.maximum(x,0), 4:lambda x : tf.pow(x,2),5:tf.tanh}
   binary = {1:lambda x,y: x+y,2:lambda x,y:x*y,3:lambda x,y:x-y,4:lambda x,y:tf.maximum(x,y),5:lambda x,y: tf.sigmoid(x)*y}
-  inputs = {1:lambda x:x , 2:lambda x:0, 3: lambda x:3.14159265,4: lambda x : 1, 5: lambda x: 1.61803399}
+  input_fun = {1:lambda x:x , 2:lambda x:0, 3: lambda x:3.14159265,4: lambda x : 1, 5: lambda x: 1.61803399}
 
   with open("tmp","r") as f:
       activation = f.readline()
       activation = activation.split(" ")
       activation = map(int,activation)
-  print(activation)
-  activation = binary[activation[4]](unary[activation[2]](inputs[activation[0]]), unary[activation[3]](inputs[activation[1]]))
+  #print(activation)
+  binary[activation[4]](unary[activation[2]](input_fun[activation[0]](inputs)),unary[activation[3]](input_fun[activation[1]](inputs)))
+  #activation = binary[activation[4]](unary[activation[2]](input_fun[activation[0](inputs)]), unary[activation[3]](input_fun[activation[1]](inputs)))
   inputs = tf.nn.relu(inputs)
   return inputs
 
