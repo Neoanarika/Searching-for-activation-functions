@@ -10,7 +10,7 @@ class Network(object):
 
     def __init__(self, config):
         self.config = config
-        self.n_steps = 9
+        self.n_steps = 10
         self.n_input, self.n_hidden =  4, 2
         self.state = tf.Variable(tf.random_normal(shape=[1, 4]))
         self.lstm = tf.contrib.rnn.BasicLSTMCell(self.n_hidden, forget_bias=1.0, state_is_tuple=False)
@@ -64,6 +64,7 @@ class Network(object):
         hyperparams[5] = options[output[5]]  # Layer 2
         hyperparams[6], hyperparams[7] = options[output[6]], options[output[7]]
         hyperparams[8] = options[output[8]] # Layer 3
+        hyperparams[9] = options[output[9]] # FNN Layer
         return hyperparams
 
     def REINFORCE(self, prob):
