@@ -280,13 +280,11 @@ def main(unused_argv):
 
   # Set up a RunConfig to only save checkpoints once per training cycle.
   #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
-  run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True))
 
   for i in range(2):
-      print(sess.run(hyperparams))
-      with open("tmp","w") as f:
-          f.write(' '.join(map(str,sess.run(hyperparams))))
       #run_config = tf.estimator.RunConfig()
+
+      run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True))
       cifar_classifier = tf.estimator.Estimator(
       model_fn=cifar10_model_fn, model_dir=FLAGS.model_dir, config=run_config,
       params={
@@ -295,6 +293,10 @@ def main(unused_argv):
         'batch_size': FLAGS.batch_size,
       })
 
+      print(sess.run(hyperparams))
+      with open("tmp","w") as f:
+          f.write(' '.join(map(str,sess.run(hyperparams))))
+          
       # FLAGS.train_epochs // FLAGS.epochs_per_eval
       for _ in range(1):
         tensors_to_log = {
