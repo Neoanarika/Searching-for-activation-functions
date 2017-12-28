@@ -64,7 +64,6 @@ class Network(object):
         hyperparams[5] = options[output[5]]  # Layer 2
         hyperparams[6], hyperparams[7] = options[output[6]], options[output[7]]
         hyperparams[8] = options[output[8]] # Layer 3
-        hyperparams[9] = options[output[9]] # FNN Layer
         return hyperparams
 
     def REINFORCE(self, prob):
