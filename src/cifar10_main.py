@@ -260,6 +260,7 @@ def cifar10_model_fn(features, labels, mode, params):
 def main(unused_argv):
   # Using the Winograd non-fused algorithms provides a small performance boost.
   os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
+
   #RNN controller
   args = Parser().get_parser().parse_args()
   #Defining rnn
@@ -277,10 +278,6 @@ def main(unused_argv):
   sess.run(tf.global_variables_initializer())
   sess.run(tf.local_variables_initializer())
 
-  print(sess.run(hyperparams))
-  with open("tmp","w") as f:
-      f.write(' '.join(map(str,sess.run(hyperparams))))
-
   # Set up a RunConfig to only save checkpoints once per training cycle.
   #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
   run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True))
@@ -293,35 +290,40 @@ def main(unused_argv):
     'batch_size': FLAGS.batch_size,
   })
 
-  # FLAGS.train_epochs // FLAGS.epochs_per_eval
-  for _ in range(1):
-    tensors_to_log = {
-        'learning_rate': 'learning_rate',
-        'cross_entropy': 'cross_entropy',
-        'train_accuracy': 'train_accuracy'
-    }
+  for i in range(2):
+      print(sess.run(hyperparams))
+      with open("tmp","w") as f:
+          f.write(' '.join(map(str,sess.run(hyperparams))))
 
-    logging_hook = tf.train.LoggingTensorHook(
-        tensors=tensors_to_log, every_n_iter=100)
+      # FLAGS.train_epochs // FLAGS.epochs_per_eval
+      for _ in range(1):
+        tensors_to_log = {
+            'learning_rate': 'learning_rate',
+            'cross_entropy': 'cross_entropy',
+            'train_accuracy': 'train_accuracy'
+        }
 
-    # cifar_classifier.train(
-    #     input_fn=lambda: input_fn(
-    #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
-    #     hooks=[logging_hook])
-    cifar_classifier.train(
-        input_fn=lambda: input_fn(
-            True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
+        logging_hook = tf.train.LoggingTensorHook(
+            tensors=tensors_to_log, every_n_iter=100)
 
-    # Evaluate the model and print results
-    eval_results = cifar_classifier.evaluate(
-        input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
-    print(eval_results)
+        # cifar_classifier.train(
+        #     input_fn=lambda: input_fn(
+        #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
+        #     hooks=[logging_hook])
+        cifar_classifier.train(
+            input_fn=lambda: input_fn(
+                True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
 
-    print("Training RNN")
-    tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
-    sess.run(tf.global_variables_initializer())
-    _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
-    print("RNN Trained")
+        # Evaluate the model and print results
+        eval_results = cifar_classifier.evaluate(
+            input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
+        print(eval_results)
+
+        print("Training RNN ")
+        tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
+        sess.run(tf.global_variables_initializer())
+        _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
+        print("RNN Trained")
 
 
 if __name__ == '__main__':
