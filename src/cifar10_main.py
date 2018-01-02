@@ -260,6 +260,7 @@ def cifar10_model_fn(features, labels, mode, params):
 def main(unused_argv):
   # Using the Winograd non-fused algorithms provides a small performance boost.
   os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
+  os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
   #RNN controller
   args = Parser().get_parser().parse_args()
