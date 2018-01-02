@@ -48,7 +48,7 @@ def batch_norm_relu(inputs, is_training, data_format):
 
   unary = {1:lambda x:x ,2:lambda x: -x, 3: lambda x: tf.maximum(x,0), 4:lambda x : tf.pow(x,2),5:lambda x : tf.tanh(tf.cast(x,tf.float32))}
   binary = {1:lambda x,y: x+y,2:lambda x,y:x*y,3:lambda x,y:x-y,4:lambda x,y:tf.maximum(x,y),5:lambda x,y: tf.sigmoid(x)*y}
-  input_fun = {1:lambda x:tf.cast(x,tf.float32) , 2:lambda x:tf.tile(0,tf.shape(x)), 3: lambda x:tf.tile(2,tf.shape(x)),4: lambda x : tf.tile(1,tf.shape(x)), 5: lambda x: tf.tile(-1,tf.shape(x))}
+  input_fun = {1:lambda x:tf.cast(x,tf.float32) , 2:lambda x:tf.zeros(tf.shape(x)), 3: lambda x:2*tf.ones(tf.shape(x)),4: lambda x : tf.ones(tf.shape(x)), 5: lambda x: -tf.ones(tf.shape(x))}
 
   with open("tmp","r") as f:
       activation = f.readline()
