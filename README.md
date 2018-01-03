@@ -4,9 +4,14 @@ This is my tensorflow implementation of the Google brain paper "Searching for ac
 
 # How to use 
 
+To find the activation functions
 ```
 python cifar10_main.py
 ```
+
+# RNN controller 
+
+![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/Rnn.png)
 # Citation
 ```
 @article{DBLP:journals/corr/abs-1710-05941,
