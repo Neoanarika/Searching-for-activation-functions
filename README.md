@@ -37,5 +37,5 @@ Status : Still a work in progress.
 # Dependencies 
 
 - Python 3
-- TensorFlow >=1.0
+- TensorFlow >=1.4
 
