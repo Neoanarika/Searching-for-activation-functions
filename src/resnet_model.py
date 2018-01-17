@@ -46,17 +46,15 @@ def batch_norm_relu(inputs, is_training, data_format):
       momentum=_BATCH_NORM_DECAY, epsilon=_BATCH_NORM_EPSILON, center=True,
       scale=True, training=is_training, fused=True)
 
-  unary = {1:lambda x:x ,2:lambda x: -x, 3: lambda x: tf.maximum(x,0), 4:lambda x : tf.pow(x,2),5:lambda x : tf.tanh(tf.cast(x,tf.float32))}
-  binary = {1:lambda x,y: tf.add(x,y),2:lambda x,y:tf.multiply(x,y),3:lambda x,y:tf.add(x,-y),4:lambda x,y:tf.maximum(x,y),5:lambda x,y: tf.sigmoid(x)*y}
-  input_fun = {1:lambda x:tf.cast(x,tf.float32) , 2:lambda x:tf.zeros(tf.shape(x)), 3: lambda x:2*tf.ones(tf.shape(x)),4: lambda x : tf.ones(tf.shape(x)), 5: lambda x: -tf.ones(tf.shape(x))}
+  unary = {"1":lambda x:x ,"2":lambda x: -x, "3": lambda x: tf.maximum(x,0), "4":lambda x : tf.pow(x,2),"5":lambda x : tf.tanh(tf.cast(x,tf.float32))}
+  binary = {"1":lambda x,y: tf.add(x,y),"2":lambda x,y:tf.multiply(x,y),"3":lambda x,y:tf.add(x,-y),"4":lambda x,y:tf.maximum(x,y),"5:"lambda x,y: tf.sigmoid(x)*y}
+  input_fun = {"1":lambda x:tf.cast(x,tf.float32) , "2":lambda x:tf.zeros(tf.shape(x)), "3": lambda x:2*tf.ones(tf.shape(x)),"4": lambda x : tf.ones(tf.shape(x)), "5": lambda x: -tf.ones(tf.shape(x))}
 
   with open("tmp","r") as f:
       activation = f.readline()
       activation = activation.split(" ")
-      activation = map(int,activation)
 
-  #inputs = binary[activation[8]](unary[activation[5]](binary[activation[4]](unary[activation[2]](input_fun[activation[0]](inputs)),unary[activation[3]](input_fun[activation[1]](inputs)))),unary[activation[7]](input_fun[activation[6]](inputs)))
-  inputs = input_fun[activation[0]](inputs)
+  inputs = binary[activation[8]](unary[activation[5]](binary[activation[4]](unary[activation[2]](input_fun[activation[0]](inputs)),unary[activation[3]](input_fun[activation[1]](inputs)))),unary[activation[7]](input_fun[activation[6]](inputs)))
   #inputs = tf.nn.relu(inputs)
   return inputs
 
