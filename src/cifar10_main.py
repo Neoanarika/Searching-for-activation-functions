@@ -284,7 +284,7 @@ def main(unused_argv):
   # Set up a RunConfig to only save checkpoints once per training cycle.
   #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
 
-  for i in range(30):
+  for i in range(1):
       print(sess.run(hyperparams))
       with open("tmp","w") as f:
           f.write(' '.join(map(str,sess.run(hyperparams))))
