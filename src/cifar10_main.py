@@ -270,21 +270,21 @@ def main(unused_argv):
   net = Network(config)
   outputs,prob = net.neural_search()
   #Generate hyperparams
-  hyperparams = net.gen_hyperparams(outputs)
-  reinforce_loss = net.REINFORCE(prob)
-  tf.summary.scalar('reinforce_loss',reinforce_loss)
-  tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
-  tf_config.gpu_options.allow_growth = True
-  sess = tf.Session(config=tf_config)
-  sess.run(tf.global_variables_initializer())
-  sess.run(tf.local_variables_initializer())
-  merged = tf.summary.merge_all()
-  train_writer = tf.summary.FileWriter('train',sess.graph)
+  for i in range(3):
+      hyperparams = net.gen_hyperparams(outputs)
+      reinforce_loss = net.REINFORCE(prob)
+      tf.summary.scalar('reinforce_loss',reinforce_loss)
+      tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
+      tf_config.gpu_options.allow_growth = True
+      sess = tf.Session(config=tf_config)
+      sess.run(tf.global_variables_initializer())
+      sess.run(tf.local_variables_initializer())
+      merged = tf.summary.merge_all()
+      train_writer = tf.summary.FileWriter('train',sess.graph)
 
-  # Set up a RunConfig to only save checkpoints once per training cycle.
-  #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
+      # Set up a RunConfig to only save checkpoints once per training cycle.
+      #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
 
-  for i in range(30):
       print(sess.run(hyperparams))
       with open("tmp","w") as f:
           f.write(' '.join(map(str,sess.run(hyperparams))))
