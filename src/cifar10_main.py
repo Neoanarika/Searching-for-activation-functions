@@ -270,7 +270,7 @@ def main(unused_argv):
   net = Network(config)
   outputs,prob = net.neural_search()
   #Generate hyperparams
-  for i in range(3):
+  for i in range(30):
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
       tf.summary.scalar('reinforce_loss',reinforce_loss)
