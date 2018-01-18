@@ -4,8 +4,9 @@ This is my tensorflow implementation of the Google brain paper "Searching for ac
 
 # How to use 
 
-To find the activation functions
+Download the data first then find the activation functions
 ```
+python cifar10_download_and_extract.py
 python cifar10_main.py
 ```
 
@@ -37,5 +38,5 @@ Status : Still a work in progress.
 # Dependencies 
 
 - Python 3
-- TensorFlow >=1.4
+- TensorFlow-GPU >=1.4
 
