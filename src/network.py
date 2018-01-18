@@ -1,3 +1,5 @@
+#RNN controller code
+
 import os
 import sys
 import utils
