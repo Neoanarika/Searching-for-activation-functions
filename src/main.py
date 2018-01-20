@@ -25,7 +25,7 @@ import sys
 import tensorflow as tf
 
 import childnetwork as resnet_model
-from network import Network
+from rnn_controller import Network
 from config import Config
 from parser import Parser
 
