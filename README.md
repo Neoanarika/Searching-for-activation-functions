@@ -1,6 +1,7 @@
 # Searching for activation functions 
 
-This is my tensorflow implementation of the Google brain paper "Searching for activation functions" for the 2017 NIPS challenge. 
+This project attempts to implement NIPS 2017 paper "Searching for activation function" (Zoph & Le 2017). Although neural networks are powerful and flexible models they are still hard to design and limited to human creativity. Partly inspired by AutoML Alpha that was realsed by google on 17 Jan 2018, this project aims to provide some starter code for deep learning researchers, students and hobbyist to get started with making their own DIY "AutoML" software to start exploring the idea of meta-learning or learning2learning in deep learning and AI. 
+
 
 # How to use 
 
@@ -8,6 +9,13 @@ Download the data first then find the activation functions
 ```
 python cifar10_download_and_extract.py
 python main.py
+```
+
+to test against ur newly generated activation functions 
+```
+python cifar100_download_and_extract.py
+python cifar100_train.py
+python cifar100_test.py
 ```
 
 Or you can open up the jupyter notebook in the repo and run from there. 
@@ -35,7 +43,6 @@ Or you can open up the jupyter notebook in the repo and run from there.
   bibsource = {dblp computer science bibliography, http://dblp.org}
 }
 ```
-Status : Still a work in progress.
 
 # Dependencies 
 
