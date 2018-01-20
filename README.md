@@ -10,6 +10,8 @@ python cifar10_download_and_extract.py
 python cifar10_main.py
 ```
 
+Or you can open up the jupyter notebook in the repo and run from there. 
+
 # RNN controller 
 
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/Rnn.png)
