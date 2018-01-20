@@ -32,7 +32,7 @@ DATA_URL = 'http://statmt.org/wmt14/training-monolingual-news-crawl/news.2013.en
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '--data_dir', type=str, default='/tmp/NMT_data/German',
+    '--data_dir', type=str, default='../data/NMT_data/German',
     help='Directory to download data and extract the tarball')
 
 
