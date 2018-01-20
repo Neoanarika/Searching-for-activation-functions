@@ -289,7 +289,7 @@ def main(unused_argv):
       with open("tmp","w") as f:
           f.write(' '.join(map(str,sess.run(hyperparams))))
       #run_config = tf.estimator.RunConfig()
-      run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True),save_checkpoints_secs=1e9)
+      run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True))
       cifar_classifier = tf.estimator.Estimator(
       model_fn=cifar10_model_fn, model_dir=FLAGS.model_dir, config=run_config,
       params={
