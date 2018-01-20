@@ -39,10 +39,10 @@ parser.add_argument('--model_dir', type=str, default='/tmp/cifar10_model',
                     help='The directory where the model will be stored.')
 
 parser.add_argument('--resnet_size', type=int, default=20,
-                    help='The size of the ResNet model to use.')
+                    help='The size of the ResNet model to use. We set as 20 by default following the paper')
 
-parser.add_argument('--train_epochs', type=int, default=250,
-                    help='The number of epochs to train.')
+parser.add_argument('--train_epochs', type=int, default=100,
+                    help='The number of epochs to train the RNN controller to generate the Activation function')
 
 parser.add_argument('--epochs_per_eval', type=int, default=10,
                     help='The number of epochs to run in between evaluations.')
@@ -269,7 +269,8 @@ def main(unused_argv):
   config = Config(args)
   net = Network(config)
   #Generate hyperparams
-  for i in range(30):
+
+  for i in range(FLAGS.train_epochs):
       outputs,prob = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)

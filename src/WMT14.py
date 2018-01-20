@@ -27,12 +27,12 @@ import tarfile
 from six.moves import urllib
 import tensorflow as tf
 
-DATA_URL = 'http://statmt.org/wmt14/training-monolingual-news-crawl/news.2013.de.shuffled.gz'
+DATA_URL = 'https://wit3.fbk.eu/archive/2016-01//texts/de/en/de-en.tgz'
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '--data_dir', type=str, default='../data/NMT_data/German',
+    '--data_dir', type=str, default='../data/wmt/',
     help='Directory to download data and extract the tarball')
 
 

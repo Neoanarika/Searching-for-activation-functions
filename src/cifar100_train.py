@@ -32,13 +32,13 @@ from parser import Parser
 parser = argparse.ArgumentParser()
 
 # Basic model parameters.
-parser.add_argument('--data_dir', type=str, default='../data/cifar10_data',
+parser.add_argument('--data_dir', type=str, default='../data/cifar100_data',
                     help='The path to the CIFAR-10 data directory.')
 
-parser.add_argument('--model_dir', type=str, default='/tmp/cifar10_model',
+parser.add_argument('--model_dir', type=str, default='/tmp/cifar100_model',
                     help='The directory where the model will be stored.')
 
-parser.add_argument('--resnet_size', type=int, default=20,
+parser.add_argument('--resnet_size', type=int, default=164,
                     help='The size of the ResNet model to use.')
 
 parser.add_argument('--train_epochs', type=int, default=250,
@@ -262,71 +262,39 @@ def main(unused_argv):
   os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
   os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-  #RNN controller
-  args = Parser().get_parser().parse_args()
-  #Defining rnn
-  val_accuracy = tf.placeholder(tf.float32)
-  config = Config(args)
-  net = Network(config)
-  #Generate hyperparams
-  for i in range(30):
-      outputs,prob = net.neural_search()
-      hyperparams = net.gen_hyperparams(outputs)
-      reinforce_loss = net.REINFORCE(prob)
-      tf.summary.scalar('reinforce_loss',reinforce_loss)
-      tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
-      tf_config.gpu_options.allow_growth = True
-      sess = tf.Session(config=tf_config)
-      sess.run(tf.global_variables_initializer())
-      sess.run(tf.local_variables_initializer())
-      merged = tf.summary.merge_all()
-      train_writer = tf.summary.FileWriter('train',sess.graph)
+  allow_soft_placement=True,log_device_placement=True))
+  cifar_classifier = tf.estimator.Estimator(
+  model_fn=cifar10_model_fn, model_dir=FLAGS.model_dir, config=run_config,
+  params={
+    'resnet_size': FLAGS.resnet_size,
+    'data_format': FLAGS.data_format,
+    'batch_size': FLAGS.batch_size,
+  })
 
-      # Set up a RunConfig to only save checkpoints once per training cycle.
-      #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
+  # FLAGS.train_epochs // FLAGS.epochs_per_eval
+  for _ in range(FLAGS.train_epochs):
+    tensors_to_log = {
+        'learning_rate': 'learning_rate',
+        'cross_entropy': 'cross_entropy',
+        'train_accuracy': 'train_accuracy'
+    }
 
-      print(sess.run(hyperparams))
-      with open("tmp","w") as f:
-          f.write(' '.join(map(str,sess.run(hyperparams))))
-      #run_config = tf.estimator.RunConfig()
-      run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True))
-      cifar_classifier = tf.estimator.Estimator(
-      model_fn=cifar10_model_fn, model_dir=FLAGS.model_dir, config=run_config,
-      params={
-        'resnet_size': FLAGS.resnet_size,
-        'data_format': FLAGS.data_format,
-        'batch_size': FLAGS.batch_size,
-      })
+    logging_hook = tf.train.LoggingTensorHook(
+        tensors=tensors_to_log, every_n_iter=100)
 
-      # FLAGS.train_epochs // FLAGS.epochs_per_eval
-      for _ in range(1):
-        tensors_to_log = {
-            'learning_rate': 'learning_rate',
-            'cross_entropy': 'cross_entropy',
-            'train_accuracy': 'train_accuracy'
-        }
+    # cifar_classifier.train(
+    #     input_fn=lambda: input_fn(
+    #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
+    #     hooks=[logging_hook])
+    cifar_classifier.train(
+        input_fn=lambda: input_fn(
+            True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
 
-        logging_hook = tf.train.LoggingTensorHook(
-            tensors=tensors_to_log, every_n_iter=100)
+    # Evaluate the model and print results
+    eval_results = cifar_classifier.evaluate(
+        input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
+    print(eval_results)
 
-        # cifar_classifier.train(
-        #     input_fn=lambda: input_fn(
-        #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
-        #     hooks=[logging_hook])
-        cifar_classifier.train(
-            input_fn=lambda: input_fn(
-                True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
-
-        # Evaluate the model and print results
-        eval_results = cifar_classifier.evaluate(
-            input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
-        print(eval_results)
-
-        print("Training RNN")
-        tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
-        sess.run(tf.global_variables_initializer())
-        _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
-        print("RNN Trained")
 
 
 if __name__ == '__main__':
