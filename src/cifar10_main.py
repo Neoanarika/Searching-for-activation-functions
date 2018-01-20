@@ -47,7 +47,7 @@ parser.add_argument('--train_epochs', type=int, default=250,
 parser.add_argument('--epochs_per_eval', type=int, default=10,
                     help='The number of epochs to run in between evaluations.')
 
-parser.add_argument('--batch_size', type=int, default=128,
+parser.add_argument('--batch_size', type=int, default=5,
                     help='The number of images per batch.')
 
 parser.add_argument(
@@ -268,9 +268,9 @@ def main(unused_argv):
   val_accuracy = tf.placeholder(tf.float32)
   config = Config(args)
   net = Network(config)
-  outputs,prob = net.neural_search()
   #Generate hyperparams
   for i in range(30):
+      outputs,prob = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
       tf.summary.scalar('reinforce_loss',reinforce_loss)
