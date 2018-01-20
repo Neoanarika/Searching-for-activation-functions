@@ -1,6 +1,6 @@
 # Searching for activation functions 
 
-This project attempts to implement NIPS 2017 paper "Searching for activation function" (Zoph & Le 2017). Although neural networks are powerful and flexible models they are still hard to design and limited to human creativity. Partly inspired by AutoML Alpha that was realsed by google on 17 Jan 2018, this project aims to provide some starter code for deep learning researchers, students and hobbyist to get started with making their own DIY "AutoML" software to start exploring the idea of meta-learning or learning2learning in deep learning and AI. 
+This project attempts to implement NIPS 2017 paper "Searching for activation function" (Zoph & Le 2017). Although neural networks are powerful and flexible models they are still hard to design and limited to human creativity. Partly inspired by AutoML Alpha that was realsed by google on 17 Jan 2018, this project aims to provide some starter code for deep learning researchers, students and hobbyist to get started with making their own DIY "AutoML" software and start exploring the idea of meta-learning or learning2learning in deep learning and AI. 
 
 
 # How to use 
