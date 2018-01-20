@@ -7,7 +7,7 @@ This is my tensorflow implementation of the Google brain paper "Searching for ac
 Download the data first then find the activation functions
 ```
 python cifar10_download_and_extract.py
-python cifar10_main.py
+python main.py
 ```
 
 Or you can open up the jupyter notebook in the repo and run from there. 
