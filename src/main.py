@@ -324,11 +324,12 @@ def main(unused_argv):
         print(eval_results)
 
         print("Training RNN")
-        old_policy = tf.identity(net)
+        old_prob = tf.identity(prob)
         tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
         sess.run(tf.global_variables_initializer())
         _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
-        assert old_policy != net, "It doesn't work"
+        outputs,prob = net.neural_search()
+        assert old_prob != prob, "It doesn't work"
         print("RNN Trained")
 
 
