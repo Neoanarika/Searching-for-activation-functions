@@ -79,21 +79,18 @@ class Network(object):
         c_1=1
         c_2=0.01
 
-        ratios = tf.exp(tf.log(prob) - tf.log(old_prob))
-        clipped_ratios = tf.clip_by_value(ratios, clip_value_min=1 - clip_value, clip_value_max=1 + clip_value)
-        loss_clip = tf.minimum(tf.multiply(self.gaes, ratios), tf.multiply(self.gaes, clipped_ratios))
-        loss_clip = tf.reduce_mean(loss_clip)
-
-        v_preds = self.Policy.v_preds
-        loss_vf = tf.squared_difference(rewards + self.gamma * self.v_preds_next, v_preds)
-        loss_vf = tf.reduce_mean(loss_vf)
-
+        ratio = tf.exp(tf.log(prob) - tf.log(old_prob))
+        surr1 = ratio * self.adv
+        surr2 = tf.clip_by_value(ratio, clip_value_min=1 - clip_value, clip_value_max=1 + clip_value) * self.adv
+        policyLoss = - tf.reduce_mean(tf.minimum(surr1, surr2))
         entropy = -tf.reduce_sum(prob*tf.log(tf.clip_by_value(prob, 1e-10, 1.0)), axis=1)
-        entropy = tf.reduce_mean(entropy, axis=0)  # mean of entropy of pi(obs)
-
-        loss = loss_clip - c_1 * loss_vf + c_2 * entropy
-        loss = -loss  # minimize -loss == maximize loss
-        return loss
+        entropyloss = tf.reduce_mean(entropy, axis=0)  # mean of entropy of pi(obs)
+        vfloss1 = tf.square(self.pipredv - self.etr)
+        vpredclipped = oldpredv + tf.clip_by_value(self.pipredv - oldpredv, -CLIP_PARAM, CLIP_PARAM)
+        vfloss2 = tf.square(vpredclipped - self.etr)
+        valueLoss = VCOEFF * tf.reduce_mean(tf.maximum(vfloss1, vfloss2))
+        total_loss = policyLoss + entropyLoss + valueLoss
+        return total_loss
 
     def train_controller(self, reinforce_loss, val_accuracy):
         #Adam was used to train the RNN controller Bello et al 2017
