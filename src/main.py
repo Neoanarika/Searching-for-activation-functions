@@ -324,9 +324,11 @@ def main(unused_argv):
         print(eval_results)
 
         print("Training RNN")
+        old_policy = net
         tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
         sess.run(tf.global_variables_initializer())
         _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
+        asset old_policy != net, "It doesn't work"
         print("RNN Trained")
 
 
