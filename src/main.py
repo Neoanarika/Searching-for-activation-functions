@@ -269,8 +269,8 @@ def main(unused_argv):
   config = Config(args)
   net = Network(config)
   #Generate hyperparams
-
-  for i in range(FLAGS.train_epochs):
+  # FLAGS.train_epochs
+  for i in range(1):
       outputs,prob = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
