@@ -274,7 +274,7 @@ def main(unused_argv):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
-      if i >1 :
+      if i >0 :
           #Polciy ratio
           r = prob/old_prob
           #Encforcing the bellman equation
