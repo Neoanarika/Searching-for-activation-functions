@@ -281,6 +281,7 @@ def main(unused_argv):
           #Encforcing the bellman equation
           delta_t = eval_results["accuracy"] + gamma*value - old_value
           A_t = delta_t + gamma*A_t
+          net.Lclip(eval_results["accuracy"],A_t)
 
       tf.summary.scalar('reinforce_loss',reinforce_loss)
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)

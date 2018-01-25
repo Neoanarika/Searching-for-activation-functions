@@ -98,7 +98,9 @@ class Network(object):
         valueLoss = VCOEFF * tf.reduce_mean(tf.maximum(vfloss1, vfloss2))
         total_loss = policyLoss + entropyLoss + valueLoss
         return total_loss
-
+    def Lclip(self,val_accuracy,a_t):
+        e = 0.2
+        return tf.minimum(val_accuracy*a_t,tf.clip_by_value(val_accuracy,1-e,1+e)*a_t)
     def train_controller(self, reinforce_loss, val_accuracy):
         #Adam was used to train the RNN controller Bello et al 2017
         learning_rate = 1e-5 #As per Bello et al 2017
