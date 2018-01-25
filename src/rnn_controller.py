@@ -17,6 +17,7 @@ class Network(object):
         self.state = tf.Variable(tf.random_normal(shape=[1, 4]))
         self.lstm = tf.contrib.rnn.BasicLSTMCell(self.n_hidden, forget_bias=1.0, state_is_tuple=False)
         self.Wc, self.bc = self.init_controller_vars()
+        self.Wv, self.bv = self.init_value_vars()
 
         # self.full_list_unary = {1:lambda x:x ,2:lambda x: -x, 3: tf.abs, 4:lambda x : tf.pow(x,2),5:lambda x : tf.pow(x,3),
         #   6:tf.sqrt,7:lambda x: tf.Variable(tf.truncated_normal([1], stddev=0.08))*x,
@@ -45,12 +46,18 @@ class Network(object):
         bc = self.bias_variable(shape=[self.n_input], name="b_controller")
         return Wc, bc
 
+    def init_value_vars(self):
+        Wv = self.weight_variable(shape=[self.n_hidden, 1], name="w_controller")
+        bv = self.bias_variable(shape=[1], name="b_controller")
+        return Wv, bv
+
     def neural_search(self):
         inp = tf.constant(np.ones((1, 4), dtype="float32"))
         output = list()
         for _ in range(self.n_steps):
             inp, self.state = self.lstm(inp, self.state)
             inp = tf.nn.softmax(tf.matmul(inp, self.Wc) + self.bc)
+            value = tf.nn.softmax(tf.matmul(inp, self.Wv) + self.bv)
             output.append(inp[0, :])
         out = [utils.max(output[i]) for i in range(self.n_steps)]
         return out, output[-1]
