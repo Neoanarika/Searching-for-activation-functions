@@ -275,13 +275,20 @@ def main(unused_argv):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
+      c_1=1
+      c_2=0.01
       if i >0 :
           #Polciy ratio
-          r = prob/old_prob
+          #We write it in this tf.exp(tf.log(prob) - tf.log(old_prob)) instead of prob/old_prob
+          #To improve numberical stability
+          r = tf.exp(tf.log(prob) - tf.log(old_prob))
           #Encforcing the bellman equation
           delta_t = eval_results["accuracy"] + gamma*value - old_value
           A_t = delta_t + gamma*A_t
-          net.Lclip(eval_results["accuracy"],A_t)
+          L_clip = net.Lclip(eval_results["accuracy"],A_t)
+          L_vf = net.Lvf(delta_t)
+          entropy_penalty = net.entropyloss(prob)
+          total_loss = L_clip - c_1*L_vf + c_2 * entropy_penalty
 
       tf.summary.scalar('reinforce_loss',reinforce_loss)
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)

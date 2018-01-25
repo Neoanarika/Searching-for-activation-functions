@@ -80,27 +80,15 @@ class Network(object):
         loss = tf.reduce_mean(tf.log(prob)) # Might have to take the negative
         return loss
 
-    def PPO(self,old_prob,prob, rewards):
-        gamma=0.95
-        clip_value=0.2
-        c_1=1
-        c_2=0.01
-
-        ratio = tf.exp(tf.log(prob) - tf.log(old_prob))
-        surr1 = ratio * self.adv
-        surr2 = tf.clip_by_value(ratio, clip_value_min=1 - clip_value, clip_value_max=1 + clip_value) * self.adv
-        policyLoss = - tf.reduce_mean(tf.minimum(surr1, surr2))
+    def entropyloss(self,prob):
         entropy = -tf.reduce_sum(prob*tf.log(tf.clip_by_value(prob, 1e-10, 1.0)), axis=1)
         entropyloss = tf.reduce_mean(entropy, axis=0)  # mean of entropy of pi(obs)
-        vfloss1 = tf.square(self.pipredv - self.etr)
-        vpredclipped = oldpredv + tf.clip_by_value(self.pipredv - oldpredv, -CLIP_PARAM, CLIP_PARAM)
-        vfloss2 = tf.square(vpredclipped - self.etr)
-        valueLoss = VCOEFF * tf.reduce_mean(tf.maximum(vfloss1, vfloss2))
-        total_loss = policyLoss + entropyLoss + valueLoss
-        return total_loss
+        return entropyloss
     def Lclip(self,val_accuracy,a_t):
         e = 0.2
         return tf.minimum(val_accuracy*a_t,tf.clip_by_value(val_accuracy,1-e,1+e)*a_t)
+    def Lvf(self,delta):
+        return tf.square(delta)
     def train_controller(self, reinforce_loss, val_accuracy):
         #Adam was used to train the RNN controller Bello et al 2017
         learning_rate = 1e-5 #As per Bello et al 2017
