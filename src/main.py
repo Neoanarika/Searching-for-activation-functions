@@ -261,7 +261,7 @@ def main(unused_argv):
   # Using the Winograd non-fused algorithms provides a small performance boost.
   os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
   os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
+  gamma = 0.95
   #RNN controller
   args = Parser().get_parser().parse_args()
   #Defining rnn
@@ -274,7 +274,9 @@ def main(unused_argv):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
-      if i >1 : prob/old_prob
+      if i >1 :
+          r = prob/old_prob
+          delta_t = eval_results["accuracy"] + gamma*value - old_value
       tf.summary.scalar('reinforce_loss',reinforce_loss)
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
       tf_config.gpu_options.allow_growth = True
@@ -326,6 +328,7 @@ def main(unused_argv):
 
         print("Training RNN")
         old_prob = tf.identity(prob)
+        old_value = tf.identity(value)
         tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
         sess.run(tf.global_variables_initializer())
         _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
