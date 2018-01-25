@@ -60,7 +60,7 @@ class Network(object):
             inp = tf.nn.softmax(tf.matmul(inp, self.Wc) + self.bc)
             output.append(inp[0, :])
         out = [utils.max(output[i]) for i in range(self.n_steps)]
-        return out, output[-1]
+        return out, output[-1],value
 
     def gen_hyperparams(self, output):
         options = tf.constant([1,2,3,4], dtype=tf.int32)

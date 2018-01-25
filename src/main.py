@@ -271,7 +271,7 @@ def main(unused_argv):
   #Generate hyperparams
   # FLAGS.train_epochs
   for i in range(2):
-      outputs,prob = net.neural_search()
+      outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
       if i >1 : prob/old_prob
@@ -287,6 +287,7 @@ def main(unused_argv):
       # Set up a RunConfig to only save checkpoints once per training cycle.
       #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
       print(sess.run(hyperparams))
+      print(sess.run(value))
       with open("tmp","w") as f:
           f.write(' '.join(map(str,sess.run(hyperparams))))
       #run_config = tf.estimator.RunConfig()
