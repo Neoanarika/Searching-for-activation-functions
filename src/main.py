@@ -288,6 +288,12 @@ def main(unused_argv):
           L_clip = net.Lclip(eval_results["accuracy"],A_t)
           L_vf = net.Lvf(delta_t)
           entropy_penalty = net.entropyloss(prob)
+          print("L_clip")
+          tf.assert_rank_at_least(L_clip,1)
+          print("L_vf")
+          tf.assert_rank_at_least(L_vf,1)
+          print("entropy_penalty")
+          tf.assert_rank_at_least(entropy_penalty,1)
           total_loss = L_clip - c_1*L_vf + c_2 * entropy_penalty
 
       tf.summary.scalar('reinforce_loss',reinforce_loss)
@@ -342,7 +348,8 @@ def main(unused_argv):
         print("Training RNN")
         old_prob = tf.identity(prob)
         old_value = tf.identity(value)
-        tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
+        #tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
+        tr_cont_step = net.update(reinforce_loss)
         sess.run(tf.global_variables_initializer())
         _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
         print("RNN Trained")

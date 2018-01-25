@@ -99,3 +99,13 @@ class Network(object):
             if grad is not None:
                 gradients[i] = (grad * val_accuracy, var)
         return optimizer.apply_gradients(gradients)
+    def ppo(self, reinforce_loss):
+        #Adam was used to train the RNN controller Bello et al 2017
+        learning_rate = 1e-5 #As per Bello et al 2017
+        optimizer = tf.train.AdamOptimizer(learning_rate)
+        var_list = [self.Wc, self.bc]
+        gradients = optimizer.compute_gradients(loss=reinforce_loss, var_list=var_list)
+        # for i, (grad, var) in enumerate(gradients):
+        #     if grad is not None:
+        #         gradients[i] = (grad * val_accuracy, var)
+        return optimizer.apply_gradients(gradients)
