@@ -279,6 +279,8 @@ def main(unused_argv):
           r = prob/old_prob
           #Encforcing the bellman equation
           delta_t = eval_results["accuracy"] + gamma*value - old_value
+          print(delta_t)
+          break
       tf.summary.scalar('reinforce_loss',reinforce_loss)
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
       tf_config.gpu_options.allow_growth = True
