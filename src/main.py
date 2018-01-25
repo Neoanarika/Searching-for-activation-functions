@@ -274,6 +274,7 @@ def main(unused_argv):
       outputs,prob = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
+      if i >1 : prob/old_prob
       tf.summary.scalar('reinforce_loss',reinforce_loss)
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
       tf_config.gpu_options.allow_growth = True
@@ -285,7 +286,6 @@ def main(unused_argv):
 
       # Set up a RunConfig to only save checkpoints once per training cycle.
       #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
-      if i >1 : print(sess.run(prob/old_prob))
       print(sess.run(hyperparams))
       with open("tmp","w") as f:
           f.write(' '.join(map(str,sess.run(hyperparams))))
