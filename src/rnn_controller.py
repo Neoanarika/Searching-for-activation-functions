@@ -84,11 +84,14 @@ class Network(object):
         entropy = -tf.reduce_sum(prob*tf.log(tf.clip_by_value(prob, 1e-10, 1.0)), axis=1)
         entropyloss = tf.reduce_mean(entropy, axis=0)  # mean of entropy of pi(obs)
         return entropyloss
+
     def Lclip(self,val_accuracy,a_t):
         e = 0.2
         return tf.minimum(val_accuracy*a_t,tf.clip_by_value(val_accuracy,1-e,1+e)*a_t)
+
     def Lvf(self,delta):
         return tf.square(delta)
+
     def train_controller(self, reinforce_loss, val_accuracy):
         #Adam was used to train the RNN controller Bello et al 2017
         learning_rate = 1e-5 #As per Bello et al 2017
@@ -99,7 +102,8 @@ class Network(object):
             if grad is not None:
                 gradients[i] = (grad * val_accuracy, var)
         return optimizer.apply_gradients(gradients)
-    def ppo(self, reinforce_loss):
+
+    def update(self, reinforce_loss):
         #Adam was used to train the RNN controller Bello et al 2017
         learning_rate = 1e-5 #As per Bello et al 2017
         optimizer = tf.train.AdamOptimizer(learning_rate)
