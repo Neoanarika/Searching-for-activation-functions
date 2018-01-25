@@ -275,7 +275,9 @@ def main(unused_argv):
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
       if i >1 :
+          #Polciy ratio
           r = prob/old_prob
+          #Encforcing the bellman equation
           delta_t = eval_results["accuracy"] + gamma*value - old_value
       tf.summary.scalar('reinforce_loss',reinforce_loss)
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
