@@ -271,7 +271,7 @@ def main(unused_argv):
   #Generate hyperparams
   # FLAGS.train_epochs
   A_t = tf.zeros((1,1))
-  for i in range(3):
+  for i in range(2):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
@@ -338,7 +338,7 @@ def main(unused_argv):
         sess.run(tf.global_variables_initializer())
         _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
         print("RNN Trained")
-    assert A_t !=tf.zeros((1,1)),  "Advantage function was not computed correctly"
+  assert A_t !=tf.zeros((1,1)),  "Advantage function was not computed correctly"
 
 
 if __name__ == '__main__':
