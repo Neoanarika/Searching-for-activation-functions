@@ -270,7 +270,8 @@ def main(unused_argv):
   net = Network(config)
   #Generate hyperparams
   # FLAGS.train_epochs
-  for i in range(2):
+  A_t = tf.zeros((1,1))
+  for i in range(3):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
@@ -279,8 +280,8 @@ def main(unused_argv):
           r = prob/old_prob
           #Encforcing the bellman equation
           delta_t = eval_results["accuracy"] + gamma*value - old_value
-          print(delta_t)
-          break
+          A_t = delta_t + gamma*A_t
+
       tf.summary.scalar('reinforce_loss',reinforce_loss)
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
       tf_config.gpu_options.allow_growth = True
@@ -337,6 +338,7 @@ def main(unused_argv):
         sess.run(tf.global_variables_initializer())
         _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
         print("RNN Trained")
+    assert A_t !=tf.zeros((1,1)),  "Advantage function was not computed correctly"
 
 
 if __name__ == '__main__':
