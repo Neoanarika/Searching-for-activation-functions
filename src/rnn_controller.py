@@ -56,8 +56,8 @@ class Network(object):
         output = list()
         for _ in range(self.n_steps):
             inp, self.state = self.lstm(inp, self.state)
-            inp = tf.nn.softmax(tf.matmul(inp, self.Wc) + self.bc)
             value = tf.nn.softmax(tf.matmul(inp, self.Wv) + self.bv)
+            inp = tf.nn.softmax(tf.matmul(inp, self.Wc) + self.bc)
             output.append(inp[0, :])
         out = [utils.max(output[i]) for i in range(self.n_steps)]
         return out, output[-1]
