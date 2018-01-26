@@ -81,7 +81,7 @@ class Network(object):
         return loss
 
     def entropyloss(self,prob):
-        entropy = -tf.reduce_sum(tf.exp(tf.log(tf.convert_to_tensor(prob))+tf.log(tf.log(tf.clip_by_value(tf.convert_to_tensor(prob), 1e-10, 1.0)))), axis=1)
+        entropy = -tf.reduce_sum(tf.exp(tf.log(prob)+tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0)))), axis=1)
         entropyloss = tf.reduce_mean(entropy, axis=0)  # mean of entropy of pi(obs)
         return entropyloss
 
