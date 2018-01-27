@@ -276,7 +276,9 @@ def main(unused_argv):
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
       tf.assert_rank_at_least(tf.convert_to_tensor(prob),1,message="prob is the fucking problem")
-      print(tf.reduce_sum(tf.exp(tf.log(prob) + tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))))))
+      entropy = tf.reduce_sum(tf.exp(tf.log(prob) + tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))))))
+      entropyloss = tf.reduce_mean(entropy, axis=0)
+      print(entropyloss)
       break
       c_1=1
       c_2=0.01
