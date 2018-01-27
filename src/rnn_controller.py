@@ -83,15 +83,15 @@ class Network(object):
     def entropyloss(self,prob):
         tf.assert_rank_at_least(tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))),1,message="clipping is computed wrongly, wrong rank")
         tf.assert_rank_at_least(tf.log(prob),1,message="log(prob) is computed wrongly, wrong rank")
-        entropy = -tf.reduce_sum(tf.exp(tf.add(tf.log(prob),tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))))), axis=1)
+        entropy = -tf.reduce_mean(tf.exp(tf.add(tf.log(prob),tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))))), axis=1)
         return entropy
 
     def Lclip(self,val_accuracy,a_t):
         e = 0.2
-        return tf.minimum(val_accuracy*a_t,tf.clip_by_value(val_accuracy,1-e,1+e)*a_t)
+        return tf.reduce_mean(tf.minimum(val_accuracy*a_t,tf.clip_by_value(val_accuracy,1-e,1+e)*a_t))
 
     def Lvf(self,delta):
-        return tf.square(delta)
+        return tf.reduce_mean(tf.square(delta))
 
     def train_controller(self, reinforce_loss, val_accuracy):
         #Adam was used to train the RNN controller Bello et al 2017

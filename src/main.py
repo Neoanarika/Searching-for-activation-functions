@@ -289,9 +289,9 @@ def main(unused_argv):
           L_clip = net.Lclip(eval_results["accuracy"],A_t)
           L_vf = net.Lvf(delta_t)
           entropy_penalty = -tf.reduce_sum(tf.exp(tf.add(tf.log(prob),tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))))))
-          tf.assert_rank_at_least(L_clip,1,message="L_clip is computed wrongly, wrong rank")
-          tf.assert_rank_at_least(L_vf,1,message="L_vf is computed wrongly, wrong rank")
-          tf.assert_rank_at_least(entropy_penalty,1,message="entropy_penalty is computed wrongly, wrong rank")
+          tf.assert_rank(L_clip,0,message="L_clip is computed wrongly, wrong rank")
+          tf.assert_rank(L_vf,0,message="L_vf is computed wrongly, wrong rank")
+          tf.assert_rank(entropy_penalty,0,message="entropy_penalty is computed wrongly, wrong rank")
           total_loss = L_clip - c_1*L_vf + c_2 * entropy_penalty
 
       tf.summary.scalar('reinforce_loss',reinforce_loss)
