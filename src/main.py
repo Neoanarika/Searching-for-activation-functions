@@ -293,7 +293,7 @@ def main(unused_argv):
           tf.assert_rank(entropy_penalty,0,message="entropy_penalty is computed wrongly, wrong rank")
           total_loss = L_clip - c_1*L_vf + c_2 * entropy_penalty
           tf.summary.scalar('loss',total_loss)
-          
+
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
       tf_config.gpu_options.allow_growth = True
       sess = tf.Session(config=tf_config)
@@ -341,15 +341,16 @@ def main(unused_argv):
         eval_results = cifar_classifier.evaluate(
             input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
         print(eval_results)
-
-        print("Training RNN")
+        
         old_prob = tf.identity(prob)
         old_value = tf.identity(value)
         #tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
-        tr_cont_step = net.update(total_loss)
-        sess.run(tf.global_variables_initializer())
-        _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
-        print("RNN Trained")
+        if i >0 :
+          print("Training RNN")
+          tr_cont_step = net.update(total_loss)
+          sess.run(tf.global_variables_initializer())
+          _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
+          print("RNN Trained")
   assert A_t !=tf.zeros((1,1)),  "Advantage function was not computed correctly"
 
 
