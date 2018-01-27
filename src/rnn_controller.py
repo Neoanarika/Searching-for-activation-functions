@@ -82,10 +82,9 @@ class Network(object):
 
     def entropyloss(self,prob):
         tf.assert_rank_at_least(tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))),1,message="clipping is computed wrongly, wrong rank")
-        tf.assert_rank_at_least(tf.log(prob),1,message="log(prob) is computed wrongly, wrong rank") 
+        tf.assert_rank_at_least(tf.log(prob),1,message="log(prob) is computed wrongly, wrong rank")
         entropy = -tf.reduce_sum(tf.exp(tf.add(tf.log(prob),tf.log(tf.log(tf.clip_by_value(prob, 1e-10, 1.0))))), axis=1)
-        entropyloss = tf.reduce_mean(entropy, axis=0)  # mean of entropy of pi(obs)
-        return entropyloss
+        return entropy
 
     def Lclip(self,val_accuracy,a_t):
         e = 0.2
