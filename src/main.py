@@ -292,8 +292,8 @@ def main(unused_argv):
           tf.assert_rank(L_vf,0,message="L_vf is computed wrongly, wrong rank")
           tf.assert_rank(entropy_penalty,0,message="entropy_penalty is computed wrongly, wrong rank")
           total_loss = L_clip - c_1*L_vf + c_2 * entropy_penalty
-
-      tf.summary.scalar('loss',total_loss)
+          tf.summary.scalar('loss',total_loss)
+          
       tf_config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
       tf_config.gpu_options.allow_growth = True
       sess = tf.Session(config=tf_config)
