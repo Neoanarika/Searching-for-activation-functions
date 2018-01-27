@@ -274,7 +274,6 @@ def main(unused_argv):
   for i in range(2):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
-      reinforce_loss = net.REINFORCE(prob)
       tf.assert_rank_at_least(tf.convert_to_tensor(prob),1,message="prob is the fucking problem")
       c_1=1
       c_2=0.01
@@ -347,7 +346,7 @@ def main(unused_argv):
         old_prob = tf.identity(prob)
         old_value = tf.identity(value)
         #tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
-        tr_cont_step = net.update(reinforce_loss)
+        tr_cont_step = net.update(total_loss)
         sess.run(tf.global_variables_initializer())
         _ = sess.run(tr_cont_step, feed_dict={val_accuracy : eval_results["accuracy"]})
         print("RNN Trained")
