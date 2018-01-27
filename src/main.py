@@ -276,6 +276,8 @@ def main(unused_argv):
       hyperparams = net.gen_hyperparams(outputs)
       reinforce_loss = net.REINFORCE(prob)
       tf.assert_rank_at_least(tf.convert_to_tensor(prob),1,message="prob is the fucking problem")
+      print(tf.log(prob))
+      break
       c_1=1
       c_2=0.01
       if i >0 :
