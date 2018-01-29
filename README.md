@@ -4,7 +4,10 @@ This project attempts to implement NIPS 2017 paper "Searching for activation fun
 
 
 # How to use 
-
+All the code for this project is stored in src folder, so first cd into the src folder 
+``` 
+cd src
+```
 Download the data first then find the activation functions
 ```
 python cifar10_download_and_extract.py
@@ -24,6 +27,14 @@ Or you can open up the jupyter notebook in the repo and run from there.
 
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/Rnn.png)
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/graph.png)
+
+# Swish
+We also implemented swish which was the activaiton function found and discussed in the original paper
+
+```
+python swish.py
+```
+![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/src/img/loss_rmsprop.png)
 
 # Citation
 ```
