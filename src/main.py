@@ -268,10 +268,11 @@ def main(unused_argv):
   val_accuracy = tf.placeholder(tf.float32)
   config = Config(args)
   net = Network(config)
+
   #Generate hyperparams
-  # FLAGS.train_epochs
   A_t = tf.zeros((1,1))
-  for i in range(2):
+  # PPO implementation
+  for i in range(400):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       tf.assert_rank_at_least(tf.convert_to_tensor(prob),1,message="prob is the fucking problem")
@@ -308,7 +309,7 @@ def main(unused_argv):
       print(sess.run(value))
       with open("tmp","w") as f:
           f.write(' '.join(map(str,sess.run(hyperparams))))
-      #run_config = tf.estimator.RunConfig()
+
       run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(allow_soft_placement=True,log_device_placement=True))
       cifar_classifier = tf.estimator.Estimator(
       model_fn=cifar10_model_fn, model_dir=FLAGS.model_dir, config=run_config,
@@ -318,8 +319,7 @@ def main(unused_argv):
         'batch_size': FLAGS.batch_size,
       })
 
-      # FLAGS.train_epochs // FLAGS.epochs_per_eval
-      for _ in range(1):
+      for _ in range(FLAGS.train_epochs // FLAGS.epochs_per_eval):
         tensors_to_log = {
             'learning_rate': 'learning_rate',
             'cross_entropy': 'cross_entropy',
@@ -329,10 +329,6 @@ def main(unused_argv):
         logging_hook = tf.train.LoggingTensorHook(
             tensors=tensors_to_log, every_n_iter=100)
 
-        # cifar_classifier.train(
-        #     input_fn=lambda: input_fn(
-        #         True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval),
-        #     hooks=[logging_hook])
         cifar_classifier.train(
             input_fn=lambda: input_fn(
                 True, FLAGS.data_dir, FLAGS.batch_size, FLAGS.epochs_per_eval))
@@ -341,10 +337,10 @@ def main(unused_argv):
         eval_results = cifar_classifier.evaluate(
             input_fn=lambda: input_fn(False, FLAGS.data_dir, FLAGS.batch_size))
         print(eval_results)
-        
+
         old_prob = tf.identity(prob)
         old_value = tf.identity(value)
-        #tr_cont_step = net.train_controller(reinforce_loss, eval_results["accuracy"])
+
         if i >0 :
           print("Training RNN")
           tr_cont_step = net.update(total_loss)
