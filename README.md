@@ -33,7 +33,7 @@ Or you can open up the jupyter notebook in the repo and run from there.
 # Swish
 We also implemented swish which was the activaiton function found and discussed in the original paper
 
-![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish.png)
+![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_.png)
 
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_graph.png)
 
