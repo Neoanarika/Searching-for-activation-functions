@@ -307,6 +307,9 @@ def main(unused_argv):
       #run_config = tf.estimator.RunConfig().replace(session_config=tf.ConfigProto(log_device_placement=True),save_checkpoints_secs=1e9)
       print(sess.run(hyperparams))
       print(sess.run(value))
+      #tmp is a temporary file which stores the encoded activation function,
+      # it is used by main.py to pass the activation function to the childnetwork which reads from the file as the the program is being run.
+      # It also acts as a cache file to store the final activation function found the agorthim 
       with open("tmp","w") as f:
           f.write(' '.join(map(str,sess.run(hyperparams))))
 
