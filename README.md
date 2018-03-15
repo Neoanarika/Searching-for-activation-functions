@@ -10,7 +10,7 @@ This project attempts to implement NIPS 2017 paper "Searching for activation fun
 - TensorFlow-GPU >=1.4
 
 # Setting up the docker environment
-If you do not have the right dependencies to run this project, you can use our <a alt="https://hub.docker.com/r/etheleon/dotfiles/">docker image</a>  which we used to run these experiments on. 
+If you do not have the right dependencies to run this project, you can use our docker image which we used to run these experiments on. 
 ```
 docker pull etheleon/dotfiles
 docker run --runtime=nvidia -it etheleon/dotfiles
@@ -49,13 +49,14 @@ We also implemented swish which was the activaiton function found and discussed 
 
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_.png)
 
-![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_graph.png)
-
 ```
 python swish.py
 ```
 
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/src/img/loss_rmsprop.png)
+
+We found a few things, the first is that sometimes during the inital phase of training the loss function remains , on average, the same. This shows that swish suffers from poor intialisation during training, at least when using initally normal distributed weights with std_dev =0.1.We tried various initialisations but there was no improvement found. Finially changing the optimiser from SGD to Rmsprop solved the problem. The diagram above is from training with Rmsprop. 
+
 
 # Visualising Swish activation function
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_com.png)
