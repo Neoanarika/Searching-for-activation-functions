@@ -1,7 +1,6 @@
 # Searching for activation functions 
 
-This project attempts to implement NIPS 2017 paper "Searching for activation function" (Zoph & Le 2017). Although neural networks are powerful and flexible models they are still hard to design and limited to human creativity. Partly inspired by AutoML Alpha that was realsed by google on 17 Jan 2018, this project aims to provide some starter code for deep learning researchers, students and hobbyist to get started with making their own DIY "AutoML" software and start exploring the idea of meta-learning or learning2learning in deep learning and AI. 
-
+This project attempts to implement NIPS 2017 paper "Searching for activation function" (Zoph & Le 2017). Although neural networks are powerful and flexible models they are still hard to design and limited to human creativity. Using a combination of exhaustive and reinforcement learning-based search, the paper claims to be able to discover multiple novel activation functions. We try to verify the claims of the paper by trying to replicate the original study. However we were unable to get a good results probably because of the lack of massive computing resources used in the original experiment (800 Titan X GPUs).   
 
 # How to use 
 First git clone the repo and then to use the code for this project is stored in src folder, so cd into the src folder 
