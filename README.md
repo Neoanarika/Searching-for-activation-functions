@@ -4,7 +4,19 @@ This project attempts to implement NIPS 2017 paper "Searching for activation fun
 
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/nas.jpeg)
 
-# How to use 
+# Dependencies 
+
+- Python 3
+- TensorFlow-GPU >=1.4
+
+# Setting up the docker environment
+If you do not have the right dependencies to run this project, you can use our docker image which we used to run these experiments on. 
+```
+docker pull etheleon/dotfiles
+docker run --runtime=nvidia -it etheleon/dotfiles
+```
+
+# Running the code
 First git clone the repo and then to use the code for this project is stored in src folder, so cd into the src folder 
 ``` 
 git clone https://github.com/Neoanarika/Searching-for-activation-functions.git
@@ -65,9 +77,4 @@ python swish.py
   bibsource = {dblp computer science bibliography, http://dblp.org}
 }
 ```
-
-# Dependencies 
-
-- Python 3
-- TensorFlow-GPU >=1.4
 
