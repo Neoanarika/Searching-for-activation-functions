@@ -45,7 +45,7 @@ python swish.py
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/src/img/loss_rmsprop.png)
 
 # Visualising Swish activation function
-![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish.png)
+![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_com.png)
 
 # Citation
 ```
