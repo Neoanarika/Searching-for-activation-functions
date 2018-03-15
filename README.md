@@ -61,6 +61,8 @@ We found a few things, the first is that sometimes during the inital phase of tr
 # Visualising Swish activation function
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_com.png)
 
+Swish has a sharp global minima especially when comapred with Relu, which may account for the high varience of the gradient updates because the model maybe stuck in the wedge to reach the global minima. Learning rate decay might thus help improve the training for models using swish. Furthermore a sharper minima corresponds with poorer generalisation, which might explain why it performs slightly worse than relu in practise. 
+
 # Citation
 ```
 @article{DBLP:journals/corr/abs-1710-05941,
