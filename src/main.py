@@ -272,7 +272,7 @@ def main(unused_argv):
   #Generate hyperparams
   A_t = tf.zeros((1,1))
   # PPO implementation
-  for i in range(400):
+  for i in range(FLAGS.train_epochs):
       outputs,prob,value = net.neural_search()
       hyperparams = net.gen_hyperparams(outputs)
       tf.assert_rank_at_least(tf.convert_to_tensor(prob),1,message="prob is the fucking problem")
