@@ -6,7 +6,7 @@ This project attempts to implement NIPS 2017 paper "Searching for activation fun
 
 # Dependencies 
 
-- Python 3
+- Anaconda3
 - TensorFlow-GPU >=1.4
 
 # Setting up the docker environment
