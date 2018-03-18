@@ -51,6 +51,8 @@ Or you can open up the jupyter notebook in the repo and run from there.
 | 1  |
 | -3  |
 
+Clearly we are doing something wrong, the problem with implementing these papers is that even if it doesn't work it could be because we are not running it long enough or maybe a bug in the program and you don't know which is casuing the negative result. 
+
 # Evaluating Swish
 We also implemented swish which was the activaiton function found and discussed in the original paper
 
