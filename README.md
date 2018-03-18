@@ -44,13 +44,13 @@ Or you can open up the jupyter notebook in the repo and run from there.
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/Rnn.png)
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/graph.png)
 
-# Some sample activation functions found (Not very successfull)
+# Some sample activation functions found
 | Activation functions  |
 | ------------- |
 | 3x  |
 | 1  |
 
-# Swish
+# Evaluating Swish
 We also implemented swish which was the activaiton function found and discussed in the original paper
 
 ![alt text](https://github.com/Neoanarika/Searching-for-activation-functions/blob/master/img/swish_.png)
