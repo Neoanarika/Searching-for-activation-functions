@@ -49,6 +49,7 @@ Or you can open up the jupyter notebook in the repo and run from there.
 | ------------- |
 | 3x  |
 | 1  |
+| -3  |
 
 # Evaluating Swish
 We also implemented swish which was the activaiton function found and discussed in the original paper
